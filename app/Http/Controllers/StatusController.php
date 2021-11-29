@@ -38,4 +38,9 @@ class StatusController extends Controller
         return back();
     }
 
+    public function page(Status $status, User $user)
+    {
+        return view('statuses.page', compact('status', 'user'));
+    }
+
 }

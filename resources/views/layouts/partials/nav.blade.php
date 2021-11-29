@@ -53,7 +53,7 @@
           <a class="nav-link active" href="{{ route('users.all') }}" >users</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('statuses.latest') }}">Your Statuses</a>
+          <a class="nav-link" href="{{ route('statuses.latest') }}">Latest Following Statuses</a>
         </li>
        
       </ul>

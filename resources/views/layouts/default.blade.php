@@ -7,7 +7,7 @@
     <title>Facebook</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="shortcut icon" href="{{ asset('facebook.ico') }}" type="image/x-icon">
-
+    <link rel="stylesheet" href="{{ asset('css/statuses.css') }}">
     <style>
     .user {
     display: inline-block;

@@ -19,6 +19,9 @@ Route::group(['middleware' => ['auth','verified']], function(){
     Route::post('follow/{id}/{userId}/', [UserController::class, 'followUser'])->name('follow');   
     Route::post('unfollow/{id}/{userId}/', [UserController::class, 'unfollowUser'])->name('unfollow');   
     Route::get('users', [UserController::class, 'index'])->name('users.all'); 
+    Route::get('/user/@{user}/profile/update', [UserController::class, 'edit'])->name('profile.edit');
+    Route::put('/user/@{user}/profile/update', [UserController::class, 'update'])->name('profile.update');
+    Route::get('status/{status}/user/@{user}/page', [StatusController::class, 'page'])->name('status.page');
 });
 
 Auth::routes();

@@ -54,17 +54,17 @@
 
 
 <div class="container">
-    <div class="main-body">
-    
+    <div class="main-body">    
           <div class="row gutters-sm">
             <div class="col-md-4 mb-3">
               <div class="card">
                 <div class="card-body">
                   <div class="d-flex flex-column align-items-center text-center">
-                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
+                    <img src="{{ asset('default.png') }}" alt="{{ $user->name }}" class="rounded-circle" width="150">
                     <div class="mt-3">
                       <h4>{{ $user->name }}</h4>
-                      <p class="text-secondary mb-1">Full Stack Developer</p>
+                      <p class="text-secondary mb-1">{{ $user->bio }}</p>
+                      <a href="{{ route('profile.edit', $user) }}" class="btn btn-sm btn-outline-warning" title="edit profile">Edit</a>
                       <p class="text-muted font-size-sm">Sign up Date:  <small>{{ $user->created_at->diffForHumans() }}</small></p>
                       <p class="">
                         <button type="button" class="btn btn-sm border border-info">
@@ -104,12 +104,13 @@
             </div>
             <div class="col-md-8">
 
-              @foreach ($user->statuses as $item)
-              @endforeach
-
-              @can('own-profile', $item)
+              @if (count($user->statuses) == 0)
+                @include('users.status')
+              @else
+                @can('own-profile', $user->statuses->first())
                   @include('users.status')
-              @endcan 
+                @endcan 
+              @endif
 
               <div class="row gutters-sm">
                 <div class="col-sm-12 mb-3">
@@ -117,7 +118,7 @@
                     <div class="card-body">
                       <h5 class="d-flex align-items-center mb-4">Statuses</h5>
                      @foreach ($user->statuses as $item)
-                     <h6>{{ $item->body }}</h6><hr>
+                     <h6><a href="{{ route('status.page',[ $item->id, $item->user->name ]) }}" class="text-decoration-none text-white">{{ \Str::limit($item->body, 30) }}</a></h6><hr>
                      @endforeach 
                   </div>
                 </div>
@@ -128,6 +129,9 @@
 
         </div>
     </div>
+    </div>
 
+  <h5 class="text-secondary text-uppercase">Suggested users</h5>
+    @include('users.suggestion-users')
 
 @endsection

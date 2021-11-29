@@ -27,7 +27,32 @@ class UserController extends Controller
     public function show(User $user)
     {
         $status = Status::all();
-        return view('users.profile',compact('user','status'));
+        $suggestedUsers = User::latest()->take(6)->get();
+        return view('users.profile',compact('user','status', 'suggestedUsers'));
+    }
+
+    /**
+     * Display the specified user resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(User $user)
+    {
+        return view('users.edit-profile',compact('user'));
+    }
+
+    /**
+     * Update the specified user info.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(User $user, Request $request)
+    {
+        // dd($request->all());
+        $user->update($request->all());
+        return redirect(route('user.profile', $user));
     }
 
     /**
