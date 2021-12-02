@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Status;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
 {
@@ -14,8 +16,17 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        return view('users.index', ['users' => User::all()]);
+    {   
+        $users = Cache::remember('users', now()->addSeconds(10), function(){
+            return User::all();
+        });
+
+        $userStatuses = Cache::remember('user-statuses', now()->addSeconds(10), function(){
+            return User::find(auth()->id())->latest()->paginate(2);
+        });
+
+
+        return view('users.index', ['users' => $users, 'userStatuses' => $userStatuses]);
     }
 
     /**
@@ -26,9 +37,19 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $status = Status::all();
-        $suggestedUsers = User::latest()->take(6)->get();
-        return view('users.profile',compact('user','status', 'suggestedUsers'));
+        $status = Cache::remember('status', now()->addSeconds(10), function(){
+            return Status::all();
+        });
+
+        $suggestedUsers = Cache::remember('suggestedUsers', now()->addSeconds(10), function() use ($user){
+            return User::where('id', '!=', $user->id)->take(6)->latest()->get();
+        });
+
+        $userStatuses = Cache::remember('user-statuses', now()->addSeconds(10), function(){
+            return User::find(auth()->id())->statuses()->latest()->paginate();
+        });
+        
+        return view('users.profile',compact('user','status', 'suggestedUsers', 'userStatuses'));
     }
 
     /**
@@ -50,8 +71,15 @@ class UserController extends Controller
      */
     public function update(User $user, Request $request)
     {
-        // dd($request->all());
-        $user->update($request->all());
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $imageName = date('Ymd') . '.' . strtolower($file->getClientOriginalExtension());
+            Image::make($file)->resize(250, 250)->save(storage_path('app\\public\\' . $imageName));
+            $user->update(array_merge($request->all(), ['image' => $imageName]));
+        }else{
+            $user->update($request->all());
+        }
+
         return redirect(route('user.profile', $user));
     }
 
@@ -63,9 +91,9 @@ class UserController extends Controller
      */
     public function followUser(Request $request ,$user){
         
-        $findUser1 = User::findOrFail($request->id);
+        $findUser = User::findOrFail($request->id);
         $user = User::findOrFail($request->userId);
-        $findUser1->follow($user);
+        $findUser->follow($user);
         return back();
     }
 
@@ -77,9 +105,9 @@ class UserController extends Controller
      */
     public function unfollowUser(Request $request ,$user){
         
-        $findUser1 = User::findOrFail($request->id);
+        $findUser = User::findOrFail($request->id);
         $user = User::findOrFail($request->userId);
-        $findUser1->unfollow($user);
+        $findUser->unfollow($user);
         return back();
     }
 

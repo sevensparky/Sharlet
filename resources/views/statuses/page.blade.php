@@ -5,14 +5,18 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-8 mx-auto">
+        <div class="col-md-8 mx-auto shadow">
             <div class="post-content">
-              <img src="https://via.placeholder.com/400x150/FFB6C1/000000" alt="post-image" class="img-responsive post-image">
+              <img src="{{ asset('flower.jpg') }}" alt="post-image" class="img-responsive post-image">
               <div class="post-container">
-                <img src="{{ asset('default.png') }}" alt="user" class="profile-photo-md pull-left">
+                @if ($user->image != null)
+                <img src="{{ imageProfilePath($user->image) }}" alt="{{ $user->name }}" class="profile-photo-md pull-left" >
+                @else                        
+                <img src="{{ asset('default.png') }}" alt="{{ $user->name }}" class="profile-photo-md pull-left">
+                @endif
                 <div class="post-detail">
                   <div class="user-info">
-                    <h5><a href="{{ route('user.profile', $status->user->name) }}" class="profile-link text-decoration-none text-white">{{ $status->user->name }}</a></h5>
+                    <h5><a href="{{ route('user.profile', $status->user->name) }}" class="profile-link text-decoration-none text-body">{{ $status->user->name }}</a></h5>
                     @if ($user->id == auth()->id())                            
                     @else
                     @if(! auth()->user()->isFollowing($user))
@@ -34,22 +38,50 @@
                     <p class="text-muted">Published {{ $status->created_at->diffForHumans() }}</p>
                   </div>
                   <div class="reaction">
-                    <a class="btn text-green"><i class="fa fa-thumbs-up"></i> 13</a>
-                    <a class="btn text-red"><i class="fa fa-thumbs-down"></i> 0</a>
+                    
+                    <form action="{{ route('increase.like', [$user, $status]) }}" method="post">
+                      @csrf
+                      <button type="submit" class="btn text-green"><i class="fa fa-thumbs-up"></i> {{ likeNumbers($status) }}</button>
+                    </form>                    
+                  
                   </div>
                   <div class="line-divider"></div>
                   <div class="post-text">
-                    <p>{{ $status->body }}</p>  
+                    <p>{!! $status->body !!}</p>  
                   </div>
                   <div class="line-divider"></div>
+                  @foreach ($comments as $comment)
                   <div class="post-comment">
-                    <img src="{{ asset('default.png') }}" alt="" class="profile-photo-sm">
-                    <p><a href="timeline.html" class="profile-link">Diana </a><i class="em em-laughing"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud </p>
+                     @if (auth()->user()->image != null)
+                      <img src="{{ imageProfilePath($comment->user->image) }}" alt="{{ $comment->user->name }}" class="profile-photo-sm" >
+                      @else                        
+                      <img src="{{ asset('default.png') }}" alt="{{ $comment->user->name }}" class="profile-photo-sm" >
+                      @endif
+                    <p><a href="{{ route('user.profile', $comment->user->name) }}" class="profile-link text-decoration-none text-body">{{ $comment->user->name }} : </a>{{ $comment->comment }}</p>
+                  
                   </div>
-                  <div class="post-comment">
-                    <img src="{{ asset('default.png') }}" alt="" class="profile-photo-sm">
-                    <input type="text" class="form-control" placeholder="Post a comment">
-                  </div>
+                  @endforeach
+        
+                  <form action="{{ route('comment.add') }}" method="post">
+                    @csrf
+                    <div class="post-comment">
+                      <input class="form-control" type="hidden" name="status_id" value="{{ $status->id }}">
+                    </div>
+
+                    <div class="post-comment">
+                      @if (auth()->user()->image != null)
+                      <img src="{{ imageProfilePath(auth()->user()->image) }}" alt="{{ auth()->user()->name }}" class="profile-photo-sm" >
+                      @else                        
+                      <img src="{{ asset('default.png') }}" alt="{{ auth()->user()->name }}" class="profile-photo-sm" >
+                      @endif  
+                      <input type="text" class="form-control" name="comment" placeholder="Post a comment">
+                      <button type="submit" class="btn btn-outline-info btn-sm ml-2" style="height: max-content;margin-top: 9px;">submit</button>
+                    </div>
+                    @error('comment')
+                    <small class="text-danger ml-5">{{ $message }}</small>
+                    @enderror
+                  </form>
+
                 </div>
               </div>
             </div>

@@ -8,14 +8,17 @@
         "php": "^7.3|^8.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
-        "hypefactors/laravel-follow": "^7.0",
+        "intervention/image": "^2.7",
         "laravel/framework": "^8.54",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.3",
-        "overtrue/laravel-follow": "^3.0"
+        "overtrue/laravel-follow": "^3.0",
+        "overtrue/laravel-like": "^4.0",
+        "tinymce/tinymce": "^5.10"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.6",
         "codeception/codeception": "^4.1",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
@@ -29,7 +32,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Helpers/helper.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

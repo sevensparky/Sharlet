@@ -50,8 +50,45 @@
     box-shadow: none!important;
 }
 
+
+.fileUploadWrap {
+  padding-top: 10px;
+  position: relative;
+}
+.file-upload-button-icon {
+  position: absolute;
+  cursor: pointer;
+/*   below means you can click through the image onto the invisible input */
+  pointer-events: none;
+  /* width:50px; */
+  top: 50%;
+  transform: translatey(-50%);
+}
+.fileName {
+  position: absolute;
+  left: 50px;
+  top: -8px;
+  pointer-events: none;
+}
+input[type=file] {
+  margin-left: -25px;
+  opacity: 0;
+}
+
 </style>
 
+<script>
+   $(document).on('change', ".fileUploadWrap input[type='file']",function(){
+        if ($(this).val()) {
+
+            var filename = $(this).val().split("\\");
+         
+            filename = filename[filename.length-1];
+
+            $('.fileName').text(filename);
+        }
+ });
+</script>
 
 <div class="container">
     <div class="main-body">    
@@ -64,18 +101,46 @@
                         @csrf
                         @method('PUT')
                         <img src="{{ asset('default.png') }}" alt="{{ $user->name }}" class="rounded-circle" width="150">
+                        
+                        <div class="fileUploadWrap">
+                          <img class="file-upload-button-icon" src="{{ asset('pen.png') }}" alt="">
+                          <input type="file" name="image">
+
+                          <p class="fileName"></p>
+                        </div>
                         <div class="mt-3">
                             <div class="form-group mt-4">
                                 <h6 class="text-left">Name:</h6>
-                                <input type="text" name="name" class="form-control shadow-none border-0" value="{{ $user->name }}" placeholder="Enter Your Name...">
+                                <input type="text" name="name" class="form-control shadow-none border-0" value="{{ $user->name }}" placeholder="Enter your Name...">
                             </div>
                             <div class="form-group">
-                                <h6 class="text-left">Bio:</h6>
-                                <input type="text" name="bio" class="form-control shadow-none border-0" value="{{ $user->bio }}" placeholder="Enter Your bio">
+                                <h6 class="text-left">Last Name:</h6>
+                                <input type="text" name="last_name" class="form-control shadow-none border-0" value="{{ $user->last_name }}" placeholder="Enter your last name">
+                            </div>
+                            <div class="form-group">
+                                <h6 class="text-left">Job Title:</h6>
+                                <input type="text" name="jobTitle" class="form-control shadow-none border-0" value="{{ $user->jobTitle }}" placeholder="Enter your job title">
                             </div>
                             <div class="form-group">
                                 <h6 class="text-left">Email:</h6>
-                                <input type="text" name="email" class="form-control shadow-none border-0" value="{{ $user->email }}" placeholder="Enter Your E-mail address">
+                                <input type="text" name="email" class="form-control shadow-none border-0" value="{{ $user->email }}" placeholder="Enter your E-mail address">
+                            </div>
+                            <div class="form-group">
+                                <h6 class="text-left">Gender:</h6>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                      <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="male" {{ $user->gender == 'male' ? 'checked' : '' }}>
+                                      <label class="form-check-label" for="gridRadios1">
+                                        Male
+                                      </label>
+                                    </div>
+                                    <div class="form-check">
+                                      <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="female" {{ $user->gender == 'female' ? 'checked' : '' }}>
+                                      <label class="form-check-label" for="gridRadios2">
+                                        Female
+                                      </label>
+                                    </div>
+                                </div>
                             </div>
                           <button type="submit" class="btn btn-primary text-uppercase" title="update profile">update</button>
                         </div>

@@ -5,7 +5,7 @@
       <div class="container">
         <div class="row no-gutters pl-2 pr-2">
           <div class="col-sm-12 col-md-6">
-            <h1 class="text-white logo">facebook</h1>
+            <h1 class="text-white logo"><a href="{{ route('home') }}" class="text-decoration-none text-body">facebook</a></h1>
           </div>
           <div class="col-sm-12 col-md-6">
             <form class="float-right" action="{{ route('login') }}" method="POST">
@@ -43,25 +43,40 @@
           <div class="col-sm-12 col-md-6 mt-3">
             <h1>Sign Up</h1>
             <h6>It's free and always will be.</h6>
-            <form>
+            @if ($errors->any())
+              <div class="alert alert-danger">
+                  <ul>
+                  @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                  @endforeach
+                  </ul>
+              </div>
+            @endif
+            <form class="form" action="{{ route('register') }}" method="POST">
+              @csrf
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  <input type="text" class="form-control" id="fname" placeholder="First Name">
+                  <input type="text" class="form-control" name="name" id="fname" placeholder="Your Name">
                 </div>
                 <div class="form-group col-md-6">
-                  <input type="text" class="form-control" id="lname" placeholder="Last Name">
+                  <input type="text" class="form-control" name="last_name" id="lname" placeholder="Last Name">
                 </div>
               </div>
               <div class="form-group">
-                <input type="text" class="form-control" id="phoneEmail" placeholder="Mobile number or email">
+                <input type="email" class="form-control" name="email" id="phoneEmail" placeholder="E-mail">
               </div>
-              <div class="form-group">
-                <input type="password" class="form-control" placeholder="New password">
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <input type="password" name="password" class="form-control" placeholder="Password">
+                </div>
+                <div class="form-group col-md-6">
+                  <input type="password" class="form-control" name="password_confirmation" placeholder="Confirmation password">
+                </div>
               </div>
               <h5 class="fb-light-blue">Birthday</h3>
               <div class="form-row mb-3">
                 <div class="col-auto pl-0 pr-0 mx-2">
-                  <select class="custom-select my-1" id="inlineFormCustomSelectPref">
+                  <select class="custom-select my-1" name="birthday_month" id="inlineFormCustomSelectPref">
                     <option value="1">Jan</option>
                     <option value="2">Feb</option>
                     <option value="3">Mar</option>
@@ -77,7 +92,7 @@
                   </select>
                 </div>
                 <div class="col-auto pl-0 pr-0 mx-2">
-                  <select class="custom-select my-1" id="inlineFormCustomSelectPref">
+                  <select class="custom-select my-1" name="birthday_day" id="inlineFormCustomSelectPref">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -112,7 +127,7 @@
                   </select>
                 </div>
                 <div class="col-auto pl-0 pr-0 mx-2">
-                  <select class="custom-select my-1" id="inlineFormCustomSelectPref">
+                  <select class="custom-select my-1" name="birthday_year" id="inlineFormCustomSelectPref">
                     <option value="1985">1985</option>
                     <option value="1986">1986</option>
                     <option value="1987">1987</option>
@@ -143,16 +158,12 @@
               <div class="col-auto pl-0">
                 <h5 class="fb-light-blue">Gender</h3>
                 <div class="custom-control custom-radio custom-control-inline">
-                  <input type="radio" id="femaleRadio" name="genderRadio" class="custom-control-input">
+                  <input type="radio" id="femaleRadio" name="gender" value="female" class="custom-control-input">
                   <label class="custom-control-label" for="femaleRadio">Female</label>
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
-                  <input type="radio" id="maleRadio" name="genderRadio" class="custom-control-input">
+                  <input type="radio" id="maleRadio" name="gender" value="male" class="custom-control-input">
                   <label class="custom-control-label" for="maleRadio">Male</label>
-                </div>
-                <div class="custom-control custom-radio custom-control-inline">
-                  <input type="radio" id="customRadio" name="genderRadio" oninput="on_change(event)" class="custom-control-input" value="customSelect">
-                  <label class="custom-control-label" for="customRadio">Custom</label>
                 </div>
                 <div class="custom-control custom-control-inline pl-0">
                   <i class="fas fa-question-circle popover-icon" tabindex="0" data-popover-content="#genderSelect" id="showPopover" data-toggle="popover" data-html="true" data-placement="left"></i>
@@ -178,7 +189,7 @@
                   <small class="text-muted">Your pronoun is visible to everyone.</small>
                   <input class="form-control" placeholder="Gender (optional)">
                 </div>
-                <small class="text-muted d-block mb-3">By clicking Sign Up, you agree to our <a href="https://www.facebook.com/legal/terms/update" target="_blank">Terms</a>, <a href="https://www.facebook.com/about/privacy/update" target="_blank">Data Policy</a> and <a href="https://www.facebook.com/policies/cookies/" target="_blank">Cookies Policy</a>. You may receive SMS Notifications from us and can opt out any time.</small>
+                <small class="text-muted d-block mb-3">By clicking Sign Up, you agree to our <a href="#" target="_blank">Terms</a>, <a href="#" target="_blank">Data Policy</a> and <a href="https://www.facebook.com/policies/cookies/" target="_blank">Cookies Policy</a>. You may receive SMS Notifications from us and can opt out any time.</small>
               </div>          
               <button type="submit" class="btn btn-md  btn-fb-submit pl-5 pr-5 mb-3">Sign Up</button>
             </form>

@@ -1,14 +1,21 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use App\Models\Status;
 
-Route::get('/', [HomeController::class,'index']);
+Route::get('/', [HomeController::class,'index'])->name('home');
+// Route::fallback('/home', function(){
+//     return redirect('/');
+// });
 
 Route::group(['middleware' => ['auth','verified']], function(){
     Route::get('statuses/@{user}' ,[StatusController::class,'index'])->name('statuses.index');
@@ -22,6 +29,10 @@ Route::group(['middleware' => ['auth','verified']], function(){
     Route::get('/user/@{user}/profile/update', [UserController::class, 'edit'])->name('profile.edit');
     Route::put('/user/@{user}/profile/update', [UserController::class, 'update'])->name('profile.update');
     Route::get('status/{status}/user/@{user}/page', [StatusController::class, 'page'])->name('status.page');
+    Route::post('/comment/store', [CommentController::class, 'store'])->name('comment.add');
+    Route::post('/reply/store', [CommentController::class ,'replyStore'])->name('reply.add');
+    Route::post('like/{user}/{status}/increase', [LikeController::class, 'like'])->name('increase.like');
+    Route::post('unlike/{user}/{status}/decrease', [LikeController::class, 'unlike'])->name('decrease.unlike');
 });
 
 Auth::routes();
@@ -46,4 +57,26 @@ Route::group([], function(){
     Route::get('/profile', function () {
         // This route can only be accessed by confirmed users...
     })->middleware('verified');
+});
+
+
+Route::get('test', function(){
+    // $com = Cache::remember('test', now()->addSeconds(15), function(){
+    //     return Status::latest()->first();
+    // });
+    
+    // $com = Cache::put('test', Status::latest()->first() ,now()->addSeconds(15));
+
+    // if (Cache::has('test')) {   
+    //     dd(Cache::get('test'));
+    // }else{
+    //     Cache::put('test', Status::latest()->first() ,now()->addSeconds(15));
+    // }
+
+    Cache::rememberForever('test', function(){
+        dd(Cache::get('test'));
+    });
+
+
+
 });

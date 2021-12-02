@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Status;
+use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
 {
@@ -13,7 +15,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('pages.home');
+        $statuses = Cache::remember('statuses', now()->addSeconds(10), function(){
+            return Status::latest()->with('user')->paginate(20);
+        }); 
+        return view('pages.home',[
+            'statuses' => $statuses
+        ]);
     } 
 
 }

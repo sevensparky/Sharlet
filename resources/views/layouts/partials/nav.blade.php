@@ -47,13 +47,13 @@
     <div class="navbar-nav-scroll">
       <ul class="navbar-nav bd-navbar-nav flex-row">
         <li class="nav-item">
-          <a class="nav-link" href="/" onclick="ga('send', 'event', 'Navbar', 'Community links', 'Bootstrap');">Home</a>
+          <a class="nav-link text-body font-weight-bolder" href="/" onclick="ga('send', 'event', 'Navbar', 'Community links', 'Bootstrap');">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="{{ route('users.all') }}" >users</a>
+          <a class="nav-link text-body font-weight-bolder active" href="{{ route('users.all') }}" >users</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('statuses.latest') }}">Latest Following Statuses</a>
+          <a class="nav-link text-body font-weight-bolder" href="{{ route('statuses.latest') }}">Latest Following Statuses</a>
         </li>
        
       </ul>
@@ -62,13 +62,13 @@
     @guest
     <ul class="navbar-nav ml-md-auto">
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('login') }}">Login</a>
+          <a class="nav-link text-body font-weight-bolder" href="{{ route('login') }}">Login</a>
         </li>    
     </ul>
     @else
     <ul class="navbar-nav ml-md-auto">
         <li class="nav-item dropdown">
-          <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <a class="nav-item nav-link text-body font-weight-bolder dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {{ auth()->user()->name }}
           </a>
           <div class="dropdown-menu dropdown-menu-md-right" aria-labelledby="bd-versions">

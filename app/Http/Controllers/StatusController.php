@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Status;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class StatusController extends Controller
 {
@@ -16,12 +18,20 @@ class StatusController extends Controller
 
     public function all()
     {
-        return view('statuses.all');
+        $allStatuses = Cache::remember('allStatuses',now()->addSeconds(10), function(){
+            return Status::latest()->paginate(5);
+        });
+        return view('statuses.all', [
+            'statuses' =>  $allStatuses
+        ]);
     }   
 
     public function index()
     {
-        $statuses = Status::all();
+        $statuses = Cache::remember('statuses', now()->addSeconds(10), function(){
+            return Status::all();
+        });
+
         return view('statuses.index',compact('statuses'));
     }
 
@@ -40,7 +50,8 @@ class StatusController extends Controller
 
     public function page(Status $status, User $user)
     {
-        return view('statuses.page', compact('status', 'user'));
+        $comments = Comment::where('commentable_id', '=', $status->id)->latest()->get();
+        return view('statuses.page', compact('status', 'user', 'comments'));
     }
 
 }

@@ -60,11 +60,18 @@
               <div class="card">
                 <div class="card-body">
                   <div class="d-flex flex-column align-items-center text-center">
+                    @if ($user->image != null)                      
+                    <img src="{{ imageProfilePath($user->image) }}" alt="{{ $user->name }}" class="rounded-circle" width="150">
+                    @else                        
                     <img src="{{ asset('default.png') }}" alt="{{ $user->name }}" class="rounded-circle" width="150">
+                    @endif
                     <div class="mt-3">
                       <h4>{{ $user->name }}</h4>
-                      <p class="text-secondary mb-1">{{ $user->bio }}</p>
+                      <p class="text-secondary mb-1">{{ $user->jobTitle }}</p>
+                      @if (auth()->id() == $user->id)                          
                       <a href="{{ route('profile.edit', $user) }}" class="btn btn-sm btn-outline-warning" title="edit profile">Edit</a>
+                      @else                          
+                      @endif
                       <p class="text-muted font-size-sm">Sign up Date:  <small>{{ $user->created_at->diffForHumans() }}</small></p>
                       <p class="">
                         <button type="button" class="btn btn-sm border border-info">
@@ -117,14 +124,15 @@
                   <div class="card h-100">
                     <div class="card-body">
                       <h5 class="d-flex align-items-center mb-4">Statuses</h5>
-                     @foreach ($user->statuses as $item)
-                     <h6><a href="{{ route('status.page',[ $item->id, $item->user->name ]) }}" class="text-decoration-none text-white">{{ \Str::limit($item->body, 30) }}</a></h6><hr>
+                     @foreach ($userStatuses as $item)
+                     <h6><a href="" class="text-decoration-none text-body">{!! \Str::limit($item->body, 30) !!}</a></h6><hr>
+                     {{-- <h6><a href="{{ route('status.page',[ $item->id, $item->name ]) }}" class="text-decoration-none text-body">{!! \Str::limit($item->body, 30) !!}</a></h6><hr> --}}
                      @endforeach 
                   </div>
                 </div>
               </div>           
-
             </div>
+            {{ $userStatuses->links() }}
           </div>
 
         </div>

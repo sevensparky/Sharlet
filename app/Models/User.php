@@ -9,10 +9,11 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Status;
 use Overtrue\LaravelFollow\Followable;
+use Overtrue\LaravelLike\Traits\Liker;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable, Followable;
+    use HasApiTokens, HasFactory, Notifiable, Followable, Liker;
 
     /**
      * The attributes that are mass assignable.
@@ -21,9 +22,16 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $fillable = [
         'name',
+        'last_name',
+        'gender',
+        'birthday_day',
+        'birthday_month',
+        'birthday_year',
+        'birthday',
+        'jobTitle',
+        'image',
         'email',
         'password',
-        'bio',
         'email_verified_at'
     ];
 
@@ -57,5 +65,4 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Status::class);
     }
 
-    
 }
