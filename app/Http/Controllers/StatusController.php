@@ -54,4 +54,17 @@ class StatusController extends Controller
         return view('statuses.page', compact('status', 'user', 'comments'));
     }
 
+    public function edit(Status $status)
+    {
+        return view('statuses.edit', compact('status'));
+    }
+
+    public function update(Status $status,Request $request)
+    {
+        $status->update([
+            'body' => $request->body
+        ]);
+        return redirect(route('user.profile', $status->user->name));
+    }
+
 }

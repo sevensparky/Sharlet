@@ -1,2 +1,2 @@
 require('./bootstrap');
-import './libs/trix.js';
+require('@fortawesome/fontawesome-free/js/all.min.js'); 

@@ -45,8 +45,8 @@ class UserController extends Controller
             return User::where('id', '!=', $user->id)->take(6)->latest()->get();
         });
 
-        $userStatuses = Cache::remember('user-statuses', now()->addSeconds(10), function(){
-            return User::find(auth()->id())->statuses()->latest()->paginate();
+        $userStatuses = Cache::remember('user-statuses', now()->addSeconds(10), function() use($user){
+            return Status::where('user_id', '=', $user->id)->latest()->paginate(5);
         });
         
         return view('users.profile',compact('user','status', 'suggestedUsers', 'userStatuses'));

@@ -72,7 +72,11 @@
 }
 input[type=file] {
   margin-left: -25px;
-  opacity: 0;
+  /* opacity: 0; */
+  width: 100px
+}
+.image-upload>input {
+  display: none;
 }
 
 </style>
@@ -100,13 +104,16 @@ input[type=file] {
                     <form action="{{ route('profile.update', $user) }}" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
+                        @if ($user->image != null)                        
+                        <img src="{{ imageProfilePath($user->image) }}" alt="{{ $user->name }}" class="rounded-circle" width="150">                            
+                        @else
                         <img src="{{ asset('default.png') }}" alt="{{ $user->name }}" class="rounded-circle" width="150">
-                        
-                        <div class="fileUploadWrap">
-                          <img class="file-upload-button-icon" src="{{ asset('pen.png') }}" alt="">
-                          <input type="file" name="image">
-
-                          <p class="fileName"></p>
+                        @endif
+                        <div class="image-upload mt-2">
+                          <label for="file-input">
+                            <i class="fa fa-file-upload" style="font-size: 1.4rem"></i>
+                          </label>                        
+                          <input id="file-input" name="image" type="file" />
                         </div>
                         <div class="mt-3">
                             <div class="form-group mt-4">

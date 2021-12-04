@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Cache;
 
 function imageProfilePath($imageName)
 {
-    // return public_path('storage\\' . $imageName);
     return asset('storage/'. $imageName);
 }
 
@@ -16,4 +15,9 @@ function likeNumbers(Status $status)
     });
 
     return $statusLikes;
+}
+
+function returnYear()
+{
+    return range(1980, date("Y"));
 }

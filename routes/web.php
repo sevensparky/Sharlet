@@ -9,13 +9,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use App\Models\Status;
 
 Route::get('/', [HomeController::class,'index'])->name('home');
-// Route::fallback('/home', function(){
-//     return redirect('/');
-// });
 
 Route::group(['middleware' => ['auth','verified']], function(){
     Route::get('statuses/@{user}' ,[StatusController::class,'index'])->name('statuses.index');
@@ -33,6 +28,8 @@ Route::group(['middleware' => ['auth','verified']], function(){
     Route::post('/reply/store', [CommentController::class ,'replyStore'])->name('reply.add');
     Route::post('like/{user}/{status}/increase', [LikeController::class, 'like'])->name('increase.like');
     Route::post('unlike/{user}/{status}/decrease', [LikeController::class, 'unlike'])->name('decrease.unlike');
+    Route::get('status/{status}/edit',[StatusController::class, 'edit'])->name('status.edit.view');
+    Route::put('status/{status}/update',[StatusController::class, 'update'])->name('status.update');
 });
 
 Auth::routes();
@@ -60,23 +57,6 @@ Route::group([], function(){
 });
 
 
-Route::get('test', function(){
-    // $com = Cache::remember('test', now()->addSeconds(15), function(){
-    //     return Status::latest()->first();
-    // });
-    
-    // $com = Cache::put('test', Status::latest()->first() ,now()->addSeconds(15));
-
-    // if (Cache::has('test')) {   
-    //     dd(Cache::get('test'));
-    // }else{
-    //     Cache::put('test', Status::latest()->first() ,now()->addSeconds(15));
-    // }
-
-    Cache::rememberForever('test', function(){
-        dd(Cache::get('test'));
-    });
-
-
-
+Route::get('home', function(){
+    return redirect('/');
 });

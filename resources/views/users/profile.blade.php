@@ -69,8 +69,7 @@
                       <h4>{{ $user->name }}</h4>
                       <p class="text-secondary mb-1">{{ $user->jobTitle }}</p>
                       @if (auth()->id() == $user->id)                          
-                      <a href="{{ route('profile.edit', $user) }}" class="btn btn-sm btn-outline-warning" title="edit profile">Edit</a>
-                      @else                          
+                      <a href="{{ route('profile.edit', $user) }}" class="btn btn-sm btn-success" title="edit profile"><i class="fa fa-pencil-alt"></i></a>                         
                       @endif
                       <p class="text-muted font-size-sm">Sign up Date:  <small>{{ $user->created_at->diffForHumans() }}</small></p>
                       <p class="">
@@ -102,7 +101,7 @@
                         </form>                            
                         @endif                            
                         @endif
-
+                        {{-- coming soon --}}
                       {{-- <button class="btn btn-outline-primary">Message</button> --}}
                     </div>
                   </div>
@@ -122,11 +121,19 @@
               <div class="row gutters-sm">
                 <div class="col-sm-12 mb-3">
                   <div class="card h-100">
+                    <h5 class="d-flex align-items-center p-4 ">Statuses</h5>                      
                     <div class="card-body">
-                      <h5 class="d-flex align-items-center mb-4">Statuses</h5>
-                     @foreach ($userStatuses as $item)
-                     <h6><a href="" class="text-decoration-none text-body">{!! \Str::limit($item->body, 30) !!}</a></h6><hr>
-                     {{-- <h6><a href="{{ route('status.page',[ $item->id, $item->name ]) }}" class="text-decoration-none text-body">{!! \Str::limit($item->body, 30) !!}</a></h6><hr> --}}
+                      @foreach ($userStatuses as $item)
+                      <div class="d-flex justify-content-between">
+                        <h6><a href="{{ route('status.page',[$item->id, $item->user->name]) }}" class="text-decoration-none text-body">{!! \Str::limit($item->body, 30) !!}</a></h6><hr>
+                        @if (auth()->id() == $item->user_id)
+                        <div>
+                          <a href="{{ route('status.edit.view', $item->id) }}" class="btn btn-outline-secondary">
+                            <i class="fa fa-pen-nib"></i>
+                          </a>
+                        </div>
+                        @endif
+                      </div><hr>
                      @endforeach 
                   </div>
                 </div>
