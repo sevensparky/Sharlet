@@ -31,4 +31,4 @@ npm run dev
 ```
 
 
-### application ready! Join :)
+### application is ready! enjoy :)
