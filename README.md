@@ -1,6 +1,19 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+## **Preview Project**
 
-## Project setup
+
+#### **Login Page**
+![Signin Signup page](public/md/1.png)
+
+#### **Profile Page** 
+![Profile page](public/md/2.png)
+
+#### **Post Page**
+![Post Page](public/md/3.png)
+
+#### **Edit Profile Page**
+![Edit Profile Page](public/md/4.png)
+
+## **Project setup**
 
 
 #### setup composer
@@ -20,6 +33,11 @@ php artisan key:generate
 php artisan migrate
 ```
 
+#### optional. run seeder
+```
+php artisan db:seed
+```
+
 #### also setup node 
 ```
 npm install
@@ -31,4 +49,4 @@ npm run dev
 ```
 
 
-### application is ready! enjoy :)
+### **_application is ready! enjoy :)_**

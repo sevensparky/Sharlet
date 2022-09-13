@@ -54,22 +54,22 @@
 
 
 <div class="container">
-    <div class="main-body">    
+    <div class="main-body">
           <div class="row gutters-sm">
             <div class="col-md-4 mb-3">
               <div class="card">
                 <div class="card-body">
                   <div class="d-flex flex-column align-items-center text-center">
-                    @if ($user->image != null)                      
+                    @if ($user->image != null)
                     <img src="{{ imageProfilePath($user->image) }}" alt="{{ $user->name }}" class="rounded-circle" width="150">
-                    @else                        
+                    @else
                     <img src="{{ asset('default.png') }}" alt="{{ $user->name }}" class="rounded-circle" width="150">
                     @endif
                     <div class="mt-3">
                       <h4>{{ $user->name }}</h4>
                       <p class="text-secondary mb-1">{{ $user->jobTitle }}</p>
-                      @if (auth()->id() == $user->id)                          
-                      <a href="{{ route('profile.edit', $user) }}" class="btn btn-sm btn-success" title="edit profile"><i class="fa fa-pencil-alt"></i></a>                         
+                      @if (auth()->id() == $user->id)
+                      <a href="{{ route('profile.edit', $user) }}" class="btn btn-sm btn-success" title="edit profile"><i class="fa fa-pencil-alt"></i></a>
                       @endif
                       <p class="text-muted font-size-sm">Sign up Date:  <small>{{ $user->created_at->diffForHumans() }}</small></p>
                       <p class="">
@@ -82,12 +82,12 @@
                           <span class="sr-only">following</span>
                         </button>
                       </p>
-                        
-                        @if ($user->id == auth()->id())                            
+
+                        @if ($user->id == auth()->id())
                         @else
                         @if(! auth()->user()->isFollowing($user))
                         <form action="{{ route('follow',[auth()->id(),$user->id]) }}"  method="post">
-                          @csrf                           
+                          @csrf
                             <button type="submit" class="btn btn-primary">
                               Follow
                             </button>
@@ -98,11 +98,9 @@
                             <button type="submit" class="btn btn-outline-primary">
                                 UnFollow
                             </button>
-                        </form>                            
-                        @endif                            
+                        </form>
                         @endif
-                        {{-- coming soon --}}
-                      {{-- <button class="btn btn-outline-primary">Message</button> --}}
+                        @endif
                     </div>
                   </div>
                 </div>
@@ -115,13 +113,13 @@
               @else
                 @can('own-profile', $user->statuses->first())
                   @include('users.status')
-                @endcan 
+                @endcan
               @endif
 
               <div class="row gutters-sm">
                 <div class="col-sm-12 mb-3">
                   <div class="card h-100">
-                    <h5 class="d-flex align-items-center p-4 ">Statuses</h5>                      
+                    <h5 class="d-flex align-items-center p-4 ">Statuses</h5>
                     <div class="card-body">
                       @foreach ($userStatuses as $item)
                       <div class="d-flex justify-content-between">
@@ -134,10 +132,10 @@
                         </div>
                         @endif
                       </div><hr>
-                     @endforeach 
+                     @endforeach
                   </div>
                 </div>
-              </div>           
+              </div>
             </div>
             {{ $userStatuses->links() }}
           </div>

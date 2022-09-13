@@ -18,9 +18,9 @@ Route::group(['middleware' => ['auth','verified']], function(){
     Route::get('statuses' ,[StatusController::class,'all'])->name('statuses.all');
     Route::post('statuses/new' ,[StatusController::class,'store'])->name('statuses.store');
     Route::get('/user/@{user}',[UserController::class,'show'])->name('user.profile');
-    Route::post('follow/{id}/{userId}/', [UserController::class, 'followUser'])->name('follow');   
-    Route::post('unfollow/{id}/{userId}/', [UserController::class, 'unfollowUser'])->name('unfollow');   
-    Route::get('users', [UserController::class, 'index'])->name('users.all'); 
+    Route::post('follow/{id}/{userId}/', [UserController::class, 'followUser'])->name('follow');
+    Route::post('unfollow/{id}/{userId}/', [UserController::class, 'unfollowUser'])->name('unfollow');
+    Route::get('users', [UserController::class, 'index'])->name('users.all');
     Route::get('/user/@{user}/profile/update', [UserController::class, 'edit'])->name('profile.edit');
     Route::put('/user/@{user}/profile/update', [UserController::class, 'update'])->name('profile.update');
     Route::get('status/{status}/user/@{user}/page', [StatusController::class, 'page'])->name('status.page');
@@ -33,29 +33,32 @@ Route::group(['middleware' => ['auth','verified']], function(){
 });
 
 Auth::routes();
-//   Activation Email 
+//   Activation Email
 Route::group([], function(){
     Route::get('/email/verify', function () {
         return view('auth.verify-email');
     })->middleware('auth')->name('verification.notice');
-    
+
     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
         $request->fulfill();
-    
+
         return redirect('/home');
     })->middleware(['auth', 'signed'])->name('verification.verify');
-    
+
     Route::post('/email/verification-notification', function (Request $request) {
         $request->user()->sendEmailVerificationNotification();
-    
+
         return back()->with('message', 'Verification link sent!');
     })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
-    
+
     Route::get('/profile', function () {
         // This route can only be accessed by confirmed users...
     })->middleware('verified');
 });
 
+Route::get('login', function(){
+    return redirect('register');
+})->name('login');
 
 Route::get('home', function(){
     return redirect('/');
